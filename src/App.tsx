@@ -12,10 +12,11 @@ type Props = {
 type State = {
   category: string
   searchTerm: string
+  categories: []
 }
 
 
-
+ 
 
 class App extends Component<Props, State> {
   constructor(props: Props){
@@ -24,7 +25,14 @@ class App extends Component<Props, State> {
     this.state = {
       category: '',
       searchTerm: '',
+      categories: [],
     }
+
+    axios.get('http://localhost:5000/api/categories').then((res) => {
+      this.setState({ categories: res.data})
+      console.log(this.state.categories)
+    })
+
   }
 
   handleChange(e : any){
@@ -39,7 +47,7 @@ class App extends Component<Props, State> {
   
   
   render() {
-    const { category, searchTerm } = this.state
+    const { category, searchTerm, categories } = this.state
     
     return(
     <div className="App">
@@ -52,23 +60,11 @@ class App extends Component<Props, State> {
             id="demo-simple-select"
             value={category}
             onChange={this.handleChange}>
-            <MenuItem value={16}>Any</MenuItem>
-            <MenuItem value={0}>Animal</MenuItem>
-            <MenuItem value={1}>Carrer</MenuItem>
-            <MenuItem value={2}>Celebrity</MenuItem>
-            <MenuItem value={3}>Dev</MenuItem>
-            <MenuItem value={4}>Explicity</MenuItem>
-            <MenuItem value={5}>Fashion</MenuItem>
-            <MenuItem value={6}>Food</MenuItem>
-            <MenuItem value={7}>History</MenuItem>
-            <MenuItem value={8}>Money</MenuItem>
-            <MenuItem value={9}>Movie</MenuItem>
-            <MenuItem value={10}>Music</MenuItem>
-            <MenuItem value={11}>Political</MenuItem>
-            <MenuItem value={12}>Religion</MenuItem>
-            <MenuItem value={13}>Science</MenuItem>
-            <MenuItem value={14}>Sport</MenuItem>
-            <MenuItem value={15}>Travel</MenuItem>
+              {
+                categories.map(category => (
+                  <MenuItem value={category}>Any</MenuItem>
+                ))
+              }
           </Select>
         </div>
       </div>
